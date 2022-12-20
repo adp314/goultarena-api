@@ -3,7 +3,7 @@ import { generateToken } from "../config/jwt.config";
 import isAuth from "../middlewares/isAuth";
 import attachCurrentUser from "../middlewares/attachCurrentUser";
 //import { isAdmin } from "../middlewares/isAdmin";
-import { UserModel } from "../model/user.model";
+import { UserModel } from "../models/user.model";
 
 import bcrypt from "bcrypt";
 
