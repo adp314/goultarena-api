@@ -14,13 +14,17 @@
   "dependencies": {
     "@types/express-jwt": "^7.4.2",
     "@types/jsonwebtoken": "^8.5.9",
+    "@types/jwt-simple": "^0.5.33",
     "@types/mongoose": "^5.11.97",
+    "axios": "^1.2.1",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-jwt": "^7.7.7",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^3.0.0",
+    "jwt-simple": "^0.5.6"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

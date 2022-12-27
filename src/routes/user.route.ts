@@ -17,7 +17,7 @@ userRouter.post("/signup", async (req, res) => {
 
     if (
       !password ||
-      !password.match( 
+      !password.match(
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/gm
       )
     ) {
@@ -74,15 +74,15 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
-userRouter.get(
-  "/profile",
-  isAuth,
-  attachCurrentUser,
-  async (req: any, res: any) => {
-    const user = await UserModel.findOne({ _id: req.currentUser._id })
-    return res.status(200).json(user);
-  }
-);
+// userRouter.get(
+//   "/profile",
+//   isAuth,
+//   attachCurrentUser,
+//   async (req: any, res: any) => {
+//     const user = await UserModel.findOne({ _id: req.currentUser._id });
+//     return res.status(200).json(user);
+//   }
+// );
 
 userRouter.delete(
   "/delete",
@@ -103,22 +103,34 @@ userRouter.delete(
   }
 );
 
-userRouter.put("/edit", isAuth, attachCurrentUser, async (req: any, res: any) => {
-  try {
+userRouter.put(
+  "/edit",
+  isAuth,
+  attachCurrentUser,
+  async (req: any, res: any) => {
+    try {
       const loggedInUser = req.currentUser;
 
       const updatedUser = await UserModel.findOneAndUpdate(
-          { _id: loggedInUser._id },
-          { ...req.body },
-          { new: true, runValidators: true }
-      )
+        { _id: loggedInUser._id },
+        { ...req.body },
+        { new: true, runValidators: true }
+      );
 
       return res.status(200).json(updatedUser);
-  }
-  catch (err){
+    } catch (err) {
       console.log(err);
       return res.status(500).json(err);
+    }
   }
+);
+
+userRouter.get("/", (req, res) => {
+  res.send("hello from index api route");
+});
+
+userRouter.get("/protected", (req, res) => {
+  res.send("hello from api protected route");
 });
 
 export { userRouter };
