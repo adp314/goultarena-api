@@ -2,13 +2,15 @@ import cors from "cors";
 import express from "express";
 import * as dotenv from "dotenv";
 import { connectToDB } from "./config/db.config";
-import { auth } from "express-oauth2-jwt-bearer";
 import axios from "axios";
-
+// import { checkJwt as checkJwtMiddleware } from "./middlewares/authz.middleware";
+import { auth } from "express-oauth2-jwt-bearer";
 dotenv.config();
 connectToDB();
 
 const app = express();
+
+// app.use(checkJwtMiddleware);
 app.use(cors());
 app.use(express.json());
 
@@ -46,32 +48,38 @@ app.use(express.json());
 // });
 
 const checkJwt = auth({
-  audience: "Goutarena unique identifier",
+  audience: "goutarena-auth0-api",
   issuerBaseURL: `https://goultarena.eu.auth0.com/`,
 });
 
-app.get("/", (req, res) => {
-  res.send("hello from index api route");
+app.use(checkJwt);
+
+app.get("/api/messages/public-message", (req, res) => {
+  res.send("hello from index public api route");
 });
 
-app.get("/protected", checkJwt, async (req: any, res: any) => {
-  try {
-    const accessToken = req.headers.authorization?.split(" ")[1];
-    const response = await axios.get(
-      "https://goultarena.eu.auth0.com/userinfo",
-      {
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    const userinfo = response.data;
-    res.json(userinfo);
-    console.log(userinfo);
-  } catch (error: any) {
-    res.send(error.message);
+app.get(
+  "/api/messages/protected-message",
+  checkJwt,
+  async (req: any, res: any) => {
+    try {
+      const accessToken = req.headers.authorization?.split(" ")[1];
+      const response = await axios.get(
+        "https://goultarena.eu.auth0.com/userinfo",
+        {
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const userinfo = response.data;
+      res.json(userinfo);
+      console.log(userinfo);
+    } catch (error: any) {
+      res.send(error.message);
+    }
   }
-});
+);
 
 // app.use(`/`, userRouter);
 
