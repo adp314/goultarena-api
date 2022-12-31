@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import { auth } from "express-oauth2-jwt-bearer";
 
+
 dotenv.config();
 
 export const checkJwt = auth({
