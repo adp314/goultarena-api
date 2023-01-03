@@ -1,23 +1,20 @@
-// import { UserModel } from "../models/user.model";
+import { UserModel } from "../models/user.model.js";
 
-// export default async function attachCurrentUser(req: any, res: any, next: any) {
-//   try {
-//     const userData = req.auth;
+export default async function attachCurrentUser(req: any, res: any, next: any) {
+  try {
+    const userData = req.body;
 
-//     const user = await UserModel.findOne(
-//       { _id: userData._id },
-//       { passwordHash: 0 }
-//     );
+    const user = await UserModel.findOne({ email: userData.email });
 
-//     if (!user) {
-//       return res.status(404).json({ msg: "User not found." });
-//     }
+    if (!user) {
+      return res.status(404).json({ msg: "User not found." });
+    }
 
-//     req.currentUser = user;
+    req.currentUser = user;
 
-//     next();
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(500).json(err);
-//   }
-// }
+    next();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+}
