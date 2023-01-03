@@ -14,37 +14,43 @@ function generateSignInUserName() {
 }
 
 const checkJwt = auth({
-  audience: "Goutarena unique identifier",
+  audience: "goutarena-auth0-api",
   issuerBaseURL: `https://goultarena.eu.auth0.com/`,
 });
 
 // userRouter.post("/signup", async (req, res) => {
 //   try {
-//     const createdUser = await UserModel.create({ ...req.body });
+//     const createdUser = await UserModel.create({
+//       ...req.body,
+//       userName: generateSignInUserName(),
+//     });
+//     console.log(createdUser);
+
 //     return res.status(201).json(createdUser);
 //   } catch (err) {
-//     console.log(err);
 //     console.log(err);
 //     return res.status(500).json(err);
 //   }
 // });
 
-userRouter.post("/signup", async (req, res) => {
+userRouter.put("/edit", checkJwt, attachCurrentUser, async (req, res) => {
   try {
-    const createdUser = await UserModel.create({
-      ...req.body,
-      userName: generateSignInUserName(),
-    });
-    console.log(createdUser);
+    const loggedInUser = req.body.email;
 
-    return res.status(201).json(createdUser);
+    const updatedEditUser = await UserModel.findOneAndUpdate(
+      { _id: loggedInUser._id },
+      { ...req.body },
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json(updatedEditUser);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
   }
 });
 
-userRouter.put("/updateorcreate", async (req: any, res: any) => {
+userRouter.put("/updateorcreate", checkJwt, async (req: any, res: any) => {
   try {
     const userData = await UserModel.findOne({ email: req.body.email });
 
