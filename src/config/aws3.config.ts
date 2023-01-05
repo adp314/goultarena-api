@@ -1,26 +1,31 @@
-const aws = require("aws-sdk");
-const multer = require("multer");
-const multerS3 = require("multer-s3");
+// import aws from "aws-sdk";
+// import { nanoid } from "nanoid";
 
-const s3 = new aws.S3({
-  accessKeyId: process.env.S3_ACCESS_KEY,
-  secretAccessKey: process.env.S3_ACCESS_SECRET,
-  region: process.env.S3_DEFAULT_REGION,
-});
+// const s3 = new aws.S3({
+//   accessKeyId: "AKIA2AHL7B3JVQJCUNJ3",
+//   secretAccessKey: "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",
+//   region: "eu-west-3",
+// });
 
-const uploadS3 = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: process.env.AWS_S3_BUCKET,
-    contentType: multerS3.AUTO_CONTENT_TYPE,
-    acl: "public-read",
-    metadata: (req: any, file: any, cb: any) => {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: (req: any, file: any, cb: any) => {
-      cb(null, "files_from_node/" + Date.now().toString() + file.originalname);
-    },
-  }),
-});
+// const key = nanoid();
 
-export default uploadS3;
+// export async function awsTestConfig() {
+//   try {
+//     const post = await s3.createPresignedPost({
+//       Bucket: "goultarena-bs3",
+//       Fields: {
+//         key: key,
+//       },
+//       Expires: 60, // seconds
+//       Conditions: [
+//         ["content-length-range", 0, 5048576 * 2], // up to 2 MB
+//       ],
+//     });
+//     console.log(post);
+//     return { key, post };
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
+
+// awsTestConfig();
