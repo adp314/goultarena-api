@@ -16,8 +16,23 @@ const checkJwt = auth({
   issuerBaseURL: `https://goultarena.eu.auth0.com/`,
 });
 
-uploadImageRouter.post("/postimg", async (req: any, res: any) => {
+uploadImageRouter.get("/postimg", async (req: any, res: any) => {
   const key = nanoid();
+
+  let param = req.query.key;
+
+  if (param) {
+    // jsplus cmt on recup les query params avc express xd
+    s3.deleteObject(
+      {
+        Bucket: "goultarena-s3bucket",
+        Key: param,
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
 
   try {
     const post = await s3.createPresignedPost({
@@ -30,7 +45,7 @@ uploadImageRouter.post("/postimg", async (req: any, res: any) => {
         ["content-length-range", 0, 5048576 * 2], // up to 2 MB
       ],
     });
-    res.send(key, post);
+    res.send({ key, post });
     console.log(key, post);
   } catch (err) {
     console.log(err);
