@@ -3,13 +3,15 @@ import { Schema, model } from "mongoose";
 const userSchema = new Schema({
   userName: {
     type: String,
-    default: "Goultarena#0000",
+    default: "",
     unique: true,
     require: true,
+    maxlength: 15,
+    minlength: 3,
   },
   email: {
     type: String,
-    default: "Goultarena@mail.default",
+    default: "",
     unique: true,
     require: true,
   },
@@ -21,6 +23,8 @@ const userSchema = new Schema({
   auth0lastConnexion: { type: String, default: "" },
   team: { type: String, default: "" },
   rank: { type: String, default: "" },
+  description: { type: String, default: "", maxlength: 100 },
+  characterSkin: { type: String },
   points: { type: Number, default: 0 },
 });
 

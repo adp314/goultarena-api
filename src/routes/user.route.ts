@@ -72,11 +72,11 @@ userRouter.put("/updateorsignup", checkJwt, async (req: any, res: any) => {
 
 userRouter.put("/edit", async (req: any, res: any) => {
   try {
-    const userData = await UserModel.findOne({ sub: req.query.sub });
-    if (userData) {
+    const findUserData = await UserModel.findOne({ sub: req.body.sub });
+    if (findUserData) {
       const updatedUser = await UserModel.findOneAndUpdate(
-        { sub: req.query.sub },
-        { ...req.body.userName },
+        { sub: req.body.sub },
+        { ...req.body },
         { new: true, runValidators: true }
       );
       return res.status(200).json(updatedUser);
