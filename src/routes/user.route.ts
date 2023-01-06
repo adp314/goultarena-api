@@ -2,7 +2,7 @@ import express from "express";
 import { UserModel } from "../models/user.model";
 import { auth } from "express-oauth2-jwt-bearer";
 import { generateUsername } from "unique-username-generator";
-import attachCurrentUser from "../middlewares/attachCurrentUser";
+// import attachCurrentUser from "../middlewares/attachCurrentUser";
 
 const userRouter = express.Router();
 
@@ -33,30 +33,24 @@ const checkJwt = auth({
 //   }
 // });
 
-userRouter.put("/edit", checkJwt, attachCurrentUser, async (req, res) => {
+userRouter.get("/fetch", checkJwt, async (req, res) => {
   try {
-    const loggedInUser = req.body.email;
-
-    const updatedEditUser = await UserModel.findOneAndUpdate(
-      { _id: loggedInUser._id },
-      { ...req.body },
-      { new: true, runValidators: true }
-    );
-
-    return res.status(200).json(updatedEditUser);
+    const fetchUser = await UserModel.findOne({ email: req.query.email });
+    console.log(fetchUser);
+    return res.status(200).json(fetchUser);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
   }
 });
 
-userRouter.put("/updateorcreate", checkJwt, async (req: any, res: any) => {
+userRouter.put("/updateorsignup", checkJwt, async (req: any, res: any) => {
   try {
-    const userData = await UserModel.findOne({ email: req.body.email });
+    const userData = await UserModel.findOne({ sub: req.body.sub });
 
     if (userData) {
       const updatedUser = await UserModel.findOneAndUpdate(
-        { email: req.body.email },
+        { sub: req.body.sub },
         { ...req.body },
         { new: true, runValidators: true }
       );
@@ -69,6 +63,23 @@ userRouter.put("/updateorcreate", checkJwt, async (req: any, res: any) => {
       console.log(createNewUser);
 
       return res.status(201).json(createNewUser);
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+userRouter.put("/edit", async (req: any, res: any) => {
+  try {
+    const userData = await UserModel.findOne({ sub: req.query.sub });
+    if (userData) {
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { sub: req.query.sub },
+        { ...req.body.userName },
+        { new: true, runValidators: true }
+      );
+      return res.status(200).json(updatedUser);
     }
   } catch (err) {
     console.log(err);

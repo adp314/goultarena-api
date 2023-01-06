@@ -19,14 +19,11 @@ const checkJwt = auth({
 uploadImageRouter.get("/postimg", async (req: any, res: any) => {
   const key = nanoid();
 
-  let param = req.query.key;
-
-  if (param) {
-    // jsplus cmt on recup les query params avc express xd
+  if (req.query.key) {
     s3.deleteObject(
       {
         Bucket: "goultarena-s3bucket",
-        Key: param,
+        Key: req.query.key,
       },
       (err) => {
         console.log(err);

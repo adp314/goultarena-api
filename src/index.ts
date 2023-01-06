@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 import { connectToDB } from "./config/db.config";
 import { userRouter } from "./routes/user.route";
 // import { checkJwt as checkJwtMiddleware } from "./middlewares/authz.middleware";
-import { auth } from "express-oauth2-jwt-bearer";
+
 import { uploadImageRouter } from "./routes/uploadImg.route";
 dotenv.config();
 connectToDB();
@@ -20,7 +20,7 @@ const app = express();
 // app.use(checkJwtMiddleware);
 app.use(cors());
 app.use(express.json());
-app.use(`/api/user/`, userRouter);
+app.use(`/api/user`, userRouter);
 app.use(`/api/uploadimg`, uploadImageRouter);
 
 // app.use(`/`, uploadImageRouter);

@@ -7,30 +7,20 @@ const userSchema = new Schema({
     unique: true,
     require: true,
   },
-
   email: {
     type: String,
     default: "Goultarena@mail.default",
     unique: true,
     require: true,
   },
-
-  profileImg: { type: String, default: "urloftheprofilepicture" },
-
+  profileImg: { type: [String], default: ["", ""] },
   role: { type: String, enum: ["ADMIN", "USER"], default: "USER" },
-
-  countryLocation: { type: String, default: "NoCountryLocation" },
-
-  sub: { type: String, default: "NoSub" },
-
+  countryLocation: { type: String, default: "" },
+  sub: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now() },
-
-  auth0lastConnexion: { type: String, default: "NoLastConnexion" },
-
-  team: { type: String, default: "NoTeam" },
-
-  rank: { type: String, default: "NoRank" },
-
+  auth0lastConnexion: { type: String, default: "" },
+  team: { type: String, default: "" },
+  rank: { type: String, default: "" },
   points: { type: Number, default: 0 },
 });
 
