@@ -3,9 +3,11 @@ import express from "express";
 import * as dotenv from "dotenv";
 import { connectToDB } from "./config/db.config";
 import { userRouter } from "./routes/user.route";
+import { auth } from "express-oauth2-jwt-bearer";
 // import { checkJwt as checkJwtMiddleware } from "./middlewares/authz.middleware";
 
 import { uploadImageRouter } from "./routes/uploadImg.route";
+
 dotenv.config();
 connectToDB();
 
@@ -16,7 +18,7 @@ const app = express();
 //   issuerBaseURL: `https://goultarena.eu.auth0.com/`,
 // });
 
-// app.use(checkJwt);
+//  app.use(checkJwt);
 // app.use(checkJwtMiddleware);
 app.use(cors());
 app.use(express.json());

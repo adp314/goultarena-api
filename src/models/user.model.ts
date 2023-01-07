@@ -24,7 +24,8 @@ const userSchema = new Schema({
   team: { type: String, default: "" },
   rank: { type: String, default: "" },
   description: { type: String, default: "", maxlength: 100 },
-  characterSkin: { type: String },
+  characterSkinUrlPage: { type: String, default: "" },
+  characterSkinUploaded: { type: [String], default: ["", ""] },
   points: { type: Number, default: 0 },
 });
 

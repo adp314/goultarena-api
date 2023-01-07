@@ -70,7 +70,7 @@ userRouter.put("/updateorsignup", checkJwt, async (req: any, res: any) => {
   }
 });
 
-userRouter.put("/edit", async (req: any, res: any) => {
+userRouter.put("/edit", checkJwt, async (req: any, res: any) => {
   try {
     const findUserData = await UserModel.findOne({ sub: req.body.sub });
     if (findUserData) {
