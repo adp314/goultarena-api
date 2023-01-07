@@ -60,7 +60,6 @@ userRouter.put("/updateorsignup", checkJwt, async (req: any, res: any) => {
         ...req.body,
         userName: generateSignInUserName(),
       });
-      console.log(createNewUser);
 
       return res.status(201).json(createNewUser);
     }

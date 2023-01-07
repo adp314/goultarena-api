@@ -4,8 +4,8 @@ import { nanoid } from "nanoid";
 import { auth } from "express-oauth2-jwt-bearer";
 
 const s3 = new aws.S3({
-  accessKeyId: "AKIA2AHL7B3JVQJCUNJ3",
-  secretAccessKey: "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",
+  accessKeyId: "AKIA2AHL7B3JVMFAN55L",
+  secretAccessKey: "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",
   region: "eu-west-3",
 });
 
@@ -19,11 +19,11 @@ const checkJwt = auth({
 uploadImageRouter.get("/postimg", async (req: any, res: any) => {
   const key = nanoid();
 
-  if (req.query.key) {
+  if (req.query.sKey) {
     s3.deleteObject(
       {
-        Bucket: "goultarena-s3bucket",
-        Key: req.query.key,
+        Bucket: "goultarena-aws3",
+        Key: req.query.sKey,
       },
       (err) => {
         console.log(err);
@@ -33,7 +33,7 @@ uploadImageRouter.get("/postimg", async (req: any, res: any) => {
 
   try {
     const post = await s3.createPresignedPost({
-      Bucket: "goultarena-s3bucket",
+      Bucket: "goultarena-aws3",
       Fields: {
         key: key,
       },
@@ -43,7 +43,6 @@ uploadImageRouter.get("/postimg", async (req: any, res: any) => {
       ],
     });
     res.send({ key, post });
-    console.log(key, post);
   } catch (err) {
     console.log(err);
   }
