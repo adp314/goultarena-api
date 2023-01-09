@@ -15,7 +15,6 @@ const userSchema = new Schema({
     unique: true,
     require: true,
   },
-  profileImg: { type: String, default: "" },
   keyProfileImg: { type: String, default: "" },
   role: { type: String, enum: ["ADMIN", "USER"], default: "USER" },
   countryLocation: { type: String, default: "" },
@@ -25,7 +24,7 @@ const userSchema = new Schema({
   team: { type: String, default: "" },
   rank: { type: String, default: "" },
   description: { type: String, default: "", maxlength: 100 },
-  characterSkinUrlPage: { type: String, default: "" },
+  // characterSkinUrlPage: { type: String, default: "" },
   characterSkinUploaded: { type: [String], default: ["", ""] },
   points: { type: Number, default: 0 },
 });

@@ -17,8 +17,7 @@ const checkJwt = auth({
 });
 
 uploadImageRouter.get("/postimg", async (req: any, res: any) => {
-  const key = nanoid();
-
+  
   if (req.query.sKey) {
     s3.deleteObject(
       {
@@ -30,22 +29,25 @@ uploadImageRouter.get("/postimg", async (req: any, res: any) => {
       }
     );
   }
-
-  try {
-    const post = await s3.createPresignedPost({
-      Bucket: "goultarena-aws3",
-      Fields: {
-        key: key,
-      },
-      Expires: 60, // seconds
-      Conditions: [
-        ["content-length-range", 0, 5048576 * 2], // up to 2 MB
-      ],
-    });
-    res.send({ key, post });
-  } catch (err) {
-    console.log(err);
+  function CreateImgKey() {
+    const key = nanoid();
+    try {
+      const post = s3.createPresignedPost({
+        Bucket: "goultarena-aws3",
+        Fields: {
+          key: key,
+        },
+        Expires: 60, // seconds
+        Conditions: [
+          ["content-length-range", 0, 5048576 * 2], // up to 2 MB
+        ],
+      });
+      res.send({ key, post });
+    } catch (err) {
+      console.log(err);
+    }
   }
+  CreateImgKey();
 });
 
 export { uploadImageRouter };
