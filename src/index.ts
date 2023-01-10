@@ -3,9 +3,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import { connectToDB } from "./config/db.config";
 import { userRouter } from "./routes/user.route";
-import { auth } from "express-oauth2-jwt-bearer";
-// import { checkJwt as checkJwtMiddleware } from "./middlewares/authz.middleware";
-
+import { teamRouter } from "./routes/team.route";
 import { uploadImageRouter } from "./routes/uploadImg.route";
 
 dotenv.config();
@@ -13,19 +11,11 @@ connectToDB();
 
 const app = express();
 
-// const checkJwt = auth({
-//   audience: "goutarena-auth0-api",
-//   issuerBaseURL: `https://goultarena.eu.auth0.com/`,
-// });
-
-//  app.use(checkJwt);
-// app.use(checkJwtMiddleware);
 app.use(cors());
 app.use(express.json());
 app.use(`/api/user`, userRouter);
 app.use(`/api/uploadimg`, uploadImageRouter);
-
-// app.use(`/`, uploadImageRouter);
+app.use(`api/team`, teamRouter);
 
 // const verifyJwt = expressjwt({
 //   secret: jwks.expressJwtSecret({
@@ -59,35 +49,6 @@ app.use(`/api/uploadimg`, uploadImageRouter);
 //     res.send(error.message);
 //   }
 // });
-
-// app.get("/api/messages/public-message", (req, res) => {
-//   res.send("hello from index public api route");
-// });
-
-// app.get(
-//   "/api/messages/protected-message",
-//   checkJwt,
-//   async (req: any, res: any) => {
-//     try {
-//       const accessToken = req.headers.authorization?.split(" ")[1];
-//       const response = await axios.get(
-//         "https://goultarena.eu.auth0.com/userinfo",
-//         {
-//           headers: {
-//             authorization: `Bearer ${accessToken}`,
-//           },
-//         }
-//       );
-//       const userinfo = response.data;
-//       res.json(userinfo);
-//       console.log(userinfo);
-//     } catch (error: any) {
-//       res.send(error.message);
-//     }
-//   }
-// );
-
-// app.use(`/`, userRouter);
 
 app.listen(Number(process.env.PORT), () => {
   console.log(`Server up and running at port ${process.env.PORT}`);

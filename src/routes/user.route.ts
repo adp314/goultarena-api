@@ -10,7 +10,7 @@ function generateSignInUserName() {
   const userNameGenerate = generateUsername("", 0, 10);
   return `${userNameGenerate}#${Math.floor(Math.random() * 10)}${Math.floor(
     Math.random() * 10
-  )}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`;
+  )}${Math.floor(Math.random() * 10)}`;
 }
 
 const checkJwt = auth({
