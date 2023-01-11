@@ -28,7 +28,7 @@ const userSchema = new Schema({
   },
   rank: { type: String, default: "" },
   description: { type: String, default: "", maxlength: 150 },
-  keyProfileImg: { type: String, default: "" },
+  keyProfileImg: { type: String, default: "iop_goultarena.png" },
   characterSkinUploaded: { type: [String], default: ["", ""] },
   playerPoints: { type: Number, default: 0 },
   playerStats: {
