@@ -35,7 +35,18 @@ const checkJwt = auth({
 
 userRouter.get("/fetch", checkJwt, async (req, res) => {
   try {
-    const fetchUser = await UserModel.findOne({ email: req.query.email });
+    const fetchUser = await UserModel.findOne({ sub: req.query.sub });
+    console.log(fetchUser);
+    return res.status(200).json(fetchUser);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+userRouter.get("/publicfetch", async (req, res) => {
+  try {
+    const fetchUser = await UserModel.findOne({ _id: req.query._id });
     console.log(fetchUser);
     return res.status(200).json(fetchUser);
   } catch (err) {

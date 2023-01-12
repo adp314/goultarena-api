@@ -8,13 +8,31 @@ const userSchema = new Schema({
     require: true,
     maxlength: 16,
     minlength: 7,
-    match: [/^[a-zA-Z][a-zA-Z0-9_-]{2,12}#[0-9]{3}$/, "Username is invalid "],
+    match: [
+      /^[a-zA-Z][a-zA-Z0-9_-]{2,12}#[0-9]{3}$/,
+      "Username Goultarena is invalid ",
+    ],
   },
   email: {
     type: String,
     default: "",
     unique: true,
     require: true,
+  },
+  socialNetworkDiscord: {
+    type: String,
+    default: "",
+    maxlength: 25,
+    match: [
+      /^[a-zA-Z][a-zA-Z0-9_-]{1,20}#[0-9]{4}$/,
+      "Username Discord is invalid ",
+    ],
+  },
+  socialNetworkTwitter: {
+    type: String,
+    default: "",
+    maxlength: 15,
+    match: [/^@[A-Za-z0-9_]{2,15}$/, "Username Twitter is invalid "],
   },
   role: { type: String, enum: ["ADMIN", "USER"], default: "USER" },
   countryLocation: { type: String, default: "" },
