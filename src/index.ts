@@ -5,6 +5,7 @@ import { connectToDB } from "./config/db.config";
 import { userRouter } from "./routes/user.route";
 import { teamRouter } from "./routes/team.route";
 import { uploadImageRouter } from "./routes/uploadImg.route";
+import { directoryRouter } from "./routes/directory.route";
 
 dotenv.config();
 connectToDB();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(`/api/user`, userRouter);
 app.use(`/api/uploadimg`, uploadImageRouter);
 app.use(`api/team`, teamRouter);
+app.use(`/api/directory`, directoryRouter);
 
 // const verifyJwt = expressjwt({
 //   secret: jwks.expressJwtSecret({
