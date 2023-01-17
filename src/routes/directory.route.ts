@@ -5,7 +5,7 @@ import { TeamModel } from "../models/team.model";
 const directoryRouter = express.Router();
 
 directoryRouter.get("/userfetch", async (req, res) => {
-  let pageNumber = Number(req?.query?.page);
+  let pageNumber = Number(req.query.page);
   try {
     if (pageNumber) {
       const fetchDirectoryUser = await UserModel.find(
