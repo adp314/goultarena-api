@@ -4,7 +4,7 @@ import { TeamModel } from "../models/team.model";
 
 const directoryRouter = express.Router();
 
-directoryRouter.get("/userfetch", async (req, res) => {
+directoryRouter.get("/usersfetch", async (req, res) => {
   let pageNumber = Number(req.query.page);
   try {
     if (pageNumber) {
@@ -20,6 +20,35 @@ directoryRouter.get("/userfetch", async (req, res) => {
 
       console.log(fetchDirectoryUser);
       return res.status(200).json(fetchDirectoryUser);
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+directoryRouter.get("/teamsfetch", async (req, res) => {
+  let pageNumber = Number(req.query.page);
+  try {
+    if (pageNumber) {
+      const fetchDirectoryTeam = await TeamModel.find(
+        {},
+        {
+          teamName: 1,
+          teamTag: 1,
+          teamKeyImg: 1,
+          teamAllStatsCount: 1,
+          totalTeamPointsScore: 1,
+        }
+      )
+        .sort({
+          teamName: 1,
+        })
+        .skip(pageNumber > 0 ? (pageNumber - 1) * 100 : 0)
+        .limit(100);
+
+      console.log(fetchDirectoryTeam);
+      return res.status(200).json(fetchDirectoryTeam);
     }
   } catch (err) {
     console.log(err);

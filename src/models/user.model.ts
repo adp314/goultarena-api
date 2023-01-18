@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 const userSchema = new Schema({
   userName: {
@@ -40,14 +40,14 @@ const userSchema = new Schema({
   createdAt: { type: Date, default: Date.now() },
   auth0lastConnexion: { type: String, default: "" },
   team: {
-    _teamId: { type: String, default: "" },
+    _teamId: { type: Types.ObjectId, ref: "Team"},
     teamName: { type: String, default: "" },
     teamTag: { type: String, default: "" },
   },
-  rank: { type: String, default: "" },
   description: { type: String, default: "", maxlength: 150 },
   keyProfileImg: { type: String, default: "FwZGg6BaKLRrK0eMG44hL" },
   characterSkinUploaded: { type: [String], default: ["", ""] },
+  playerRankElo: { type: Number, default: 0 },
   playerPoints: { type: Number, default: 0 },
   playerStats: {
     totalWins: { type: Number, default: 0 },

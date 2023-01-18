@@ -1,12 +1,14 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 const teamSchema = new Schema({
   teamName: { type: String, default: "" },
-  tagName: { type: String, default: "" },
+  teamTag: { type: String, default: "" },
   teamDescription: { type: String, default: "" },
-  keyTeamImg: { type: String, default: "" },
-  totalTeamScore: { type: String, default: "" },
-  teamPassword: { type: String, default: "" },
+  teamKeyImg: { type: String, default: "" },
+  teamLeaderId: { type: Types.ObjectId, ref: "User" },
+  teamMembers: [{ type: Types.ObjectId, ref: "User" }],
+  teamSecretCode: { type: String, default: "" },
+  totalTeamPointsScore: { type: Number, default: 0 },
   teamLaddersInCourse: { type: [String] },
   allTeamLaddersFinish: { type: [String] },
   teamAllStatsCount: {

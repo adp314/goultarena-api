@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(`/api/user`, userRouter);
 app.use(`/api/uploadimg`, uploadImageRouter);
-app.use(`api/team`, teamRouter);
+app.use(`/api/team`, teamRouter);
 app.use(`/api/directory`, directoryRouter);
 
 // const verifyJwt = expressjwt({

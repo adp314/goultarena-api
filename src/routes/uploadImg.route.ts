@@ -13,7 +13,7 @@ const uploadImageRouter = express.Router();
 
 // for users
 
-uploadImageRouter.get("/postuserimg", async (req: any, res: any) => {
+uploadImageRouter.get("/postimguser", async (req: any, res: any) => {
   if (req.query.sKey) {
     s3.deleteObject(
       {
@@ -48,7 +48,7 @@ uploadImageRouter.get("/postuserimg", async (req: any, res: any) => {
 
 // for teams
 
-uploadImageRouter.get("/postteamimg", async (req: any, res: any) => {
+uploadImageRouter.get("/postimgteam", async (req: any, res: any) => {
   if (req.query.sKey) {
     s3.deleteObject(
       {
