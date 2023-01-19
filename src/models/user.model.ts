@@ -40,11 +40,11 @@ const userSchema = new Schema({
   createdAt: { type: Date, default: Date.now() },
   auth0lastConnexion: { type: String, default: "" },
   team: {
-    _teamId: { type: Types.ObjectId, ref: "Team"},
+    _teamId: { type: Types.ObjectId, ref: "Team" },
     teamName: { type: String, default: "" },
     teamTag: { type: String, default: "" },
   },
-  description: { type: String, default: "", maxlength: 150 },
+  description: { type: String, default: "", maxlength: 128 },
   keyProfileImg: { type: String, default: "FwZGg6BaKLRrK0eMG44hL" },
   characterSkinUploaded: { type: [String], default: ["", ""] },
   playerRankElo: { type: Number, default: 0 },

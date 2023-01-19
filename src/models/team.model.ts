@@ -2,8 +2,8 @@ import { Schema, model, Types } from "mongoose";
 
 const teamSchema = new Schema({
   teamName: { type: String, default: "" },
-  teamTag: { type: String, default: "" },
-  teamDescription: { type: String, default: "" },
+  teamTag: { type: String, default: "", maxlength: 3, minlength: 1 },
+  teamDescription: { type: String, default: "", maxlength: 128 },
   teamKeyImg: { type: String, default: "" },
   teamLeaderId: { type: Types.ObjectId, ref: "User" },
   teamMembers: [{ type: Types.ObjectId, ref: "User" }],

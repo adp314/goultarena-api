@@ -55,6 +55,17 @@ userRouter.get("/publicfetch", async (req, res) => {
   }
 });
 
+userRouter.get("/publicsubfetch", async (req, res) => {
+  try {
+    const fetchUser = await UserModel.findOne({ sub: req.query.sub });
+    console.log(`with /publicsubfetch route, user : ${fetchUser?.userName}`);
+    return res.status(200).json(fetchUser);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
 userRouter.put("/updateorsignup", checkJwt, async (req: any, res: any) => {
   try {
     const userData = await UserModel.findOne({ sub: req.body.sub });
@@ -65,6 +76,7 @@ userRouter.put("/updateorsignup", checkJwt, async (req: any, res: any) => {
         { ...req.body },
         { new: true, runValidators: true }
       );
+      console.log(`updated or signup done for sub : ${req.body.sub}`);
       return res.status(200).json(updatedUser);
     } else {
       const createNewUser = await UserModel.create({
