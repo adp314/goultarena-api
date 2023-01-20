@@ -64,7 +64,7 @@ teamRouter.get("/fetch", checkJwt, async (req, res) => {
 teamRouter.get("/publicfetch", async (req, res) => {
   try {
     const fetchTeam = await TeamModel.findOne({ _id: req.query._id });
-    console.log(`with /fetch route & checkJwt, user : ${fetchTeam?.teamName}`);
+    console.log(`with /fetch route im in team, user : ${fetchTeam?.teamName}`);
     return res.status(200).json(fetchTeam);
   } catch (err) {
     console.log(err);
