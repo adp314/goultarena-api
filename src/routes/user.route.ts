@@ -35,8 +35,10 @@ const checkJwt = auth({
 
 userRouter.get("/fetch", checkJwt, async (req, res) => {
   try {
-    const fetchUser = await UserModel.findOne({ sub: req.query.sub });
-    console.log(`with /fetch route & checkJwt, user : ${fetchUser?.userName}`);
+    const fetchUser = await UserModel.findOne({ id: req.query._id });
+    console.log(
+      `with /fetch route & checkJwt finded id query, user : ${fetchUser?.userName}`
+    );
     return res.status(200).json(fetchUser);
   } catch (err) {
     console.log(err);
@@ -76,7 +78,9 @@ userRouter.put("/updateorsignup", checkJwt, async (req: any, res: any) => {
         { ...req.body },
         { new: true, runValidators: true }
       );
-      console.log(`updated or signup done for sub : ${req.body.sub}`);
+      console.log(
+        `updated or signup done, the infos returned are : ${updatedUser?.userName}`
+      );
       return res.status(200).json(updatedUser);
     } else {
       const createNewUser = await UserModel.create({
@@ -94,13 +98,14 @@ userRouter.put("/updateorsignup", checkJwt, async (req: any, res: any) => {
 
 userRouter.put("/edit", checkJwt, async (req: any, res: any) => {
   try {
-    const findUserData = await UserModel.findOne({ sub: req.body.sub });
+    const findUserData = await UserModel.findOne({ _id: req.body._id });
     if (findUserData) {
       const updatedUser = await UserModel.findOneAndUpdate(
-        { sub: req.body.sub },
+        { _id: req.body._id },
         { ...req.body },
         { new: true, runValidators: true }
       );
+      console.log(` /edit & check validate, user : ${updatedUser?.userName}`);
       return res.status(200).json(updatedUser);
     }
   } catch (err) {
