@@ -53,6 +53,7 @@ teamRouter.post("/create", checkJwt, async (req: any, res: any) => {
 teamRouter.get("/fetch", checkJwt, async (req, res) => {
   try {
     const fetchTeam = await TeamModel.findOne({ _id: req.query._id });
+
     console.log(`with /fetch route & checkJwt, user : ${fetchTeam?.teamName}`);
     return res.status(200).json(fetchTeam);
   } catch (err) {
@@ -61,10 +62,21 @@ teamRouter.get("/fetch", checkJwt, async (req, res) => {
   }
 });
 
-teamRouter.get("/publicfetch", async (req, res) => {
+teamRouter.get("/publicfetchbyteamid", async (req, res) => {
   try {
-    const fetchTeam = await TeamModel.findOne({ _id: req.query._id });
+    const fetchTeam = await TeamModel.findOne({ _id: req.query.id });
     console.log(`with /fetch route im in team, user : ${fetchTeam?.teamName}`);
+    return res.status(200).json(fetchTeam);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+teamRouter.get("/publicfetchbyuserid", async (req, res) => {
+  try {
+    const fetchTeam = await TeamModel.findOne({ teamLeaderId: req.query.teamleader });
+    console.log(`with  team/publicfetchbyuserid : ${fetchTeam?.teamName}`);
     return res.status(200).json(fetchTeam);
   } catch (err) {
     console.log(err);
