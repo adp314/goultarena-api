@@ -35,10 +35,10 @@ const userSchema = new Schema({
     match: [/^@[A-Za-z0-9_]{2,15}$/, "Username Twitter is invalid "],
   },
   role: { type: String, enum: ["ADMIN", "USER"], default: "USER" },
-  countryLocation: { type: String, default: "" },
+  country_location: { type: String, default: "" },
   sub: { type: String, default: "", unique: true, require: true },
   createdAt: { type: Date, default: Date.now() },
-  auth0lastConnexion: { type: String, default: "" },
+  updated_at: { type: String, default: "" },
   team: {
     _teamId: { type: Types.ObjectId, ref: "Team" },
     teamName: { type: String, default: "" },

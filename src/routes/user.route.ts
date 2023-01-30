@@ -49,16 +49,17 @@ userRouter.get("/fetch", checkJwt, async (req, res) => {
 userRouter.get("/specialfetch", checkJwt, async (req, res) => {
   try {
     const fetchUser = await UserModel.findOne({ sub: req.query.sub });
-    console.log(
-      `with user/specialfetch route & checkJwt, user : ${fetchUser?.userName}`
-    );
+    if (fetchUser) {
+      console.log(
+        `with user/specialfetch route & checkJwt, user : ${fetchUser.userName}`
+      );
+    }
     return res.status(200).json(fetchUser);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
   }
 });
-
 
 userRouter.get("/publicfetch", async (req, res) => {
   try {
