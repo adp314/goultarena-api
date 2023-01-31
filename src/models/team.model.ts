@@ -8,6 +8,7 @@ const teamSchema = new Schema({
   teamLeaderId: { type: Types.ObjectId, ref: "User" },
   teamMembers: [{ type: Types.ObjectId, ref: "User" }],
   teamSecretCode: { type: String, default: "" },
+  teamPostulations: [{ type: Types.ObjectId, ref: "User" }],
   totalTeamPointsScore: { type: Number, default: 0 },
   teamLaddersInCourse: { type: [String] },
   allTeamLaddersFinish: { type: [String] },

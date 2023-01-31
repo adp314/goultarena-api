@@ -75,9 +75,55 @@ teamRouter.get("/publicfetchbyteamid", async (req, res) => {
 
 teamRouter.get("/publicfetchbyuserid", async (req, res) => {
   try {
-    const fetchTeam = await TeamModel.findOne({ teamLeaderId: req.query.teamleader });
+    const fetchTeam = await TeamModel.findOne({
+      teamLeaderId: req.query.teamleader,
+    });
     console.log(`with  team/publicfetchbyuserid : ${fetchTeam?.teamName}`);
     return res.status(200).json(fetchTeam);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+teamRouter.post("/postulation", async (req, res) => {
+  try {
+    const checkTeam = await TeamModel.findOne({
+      _id: req.body.teamId,
+    });
+    const checkUser = await UserModel.findOne({
+      _id: req.body.userId,
+    });
+    const checkSecretCode = await TeamModel.findOne({
+      teamSecretCode: req.body.secretCode,
+    });
+    if (checkTeam && checkUser && checkSecretCode) {
+      const updateTeamPostulations = await TeamModel.findOneAndUpdate(
+        { _id: req.body.teamId },
+        { $push: { teamPostulations: req.body.userId } },
+        { new: true, runValidators: true }
+      );
+    }
+
+    return res.status(200).json();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+teamRouter.get("/postulationsfetch", async (req, res) => {
+  try {
+    const fetchPostulationUsers = await UserModel.find(
+      {},
+      { userName: 1, keyProfileImg: 1, playerPoints: 1 }
+    )
+      .sort({
+        userName: 1,
+      })
+      .limit(100);
+    console.log(fetchPostulationUsers);
+    return res.status(200).json(fetchPostulationUsers);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

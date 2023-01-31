@@ -63,7 +63,7 @@ userRouter.get("/specialfetch", checkJwt, async (req, res) => {
 
 userRouter.get("/publicfetch", async (req, res) => {
   try {
-    const fetchUser = await UserModel.findOne({ _id: req.query?.id });
+    const fetchUser = await UserModel.findOne({ _id: req.query.id });
     console.log(`with /publicfetch route, user : ${fetchUser?.userName}`);
     return res.status(200).json(fetchUser);
   } catch (err) {
