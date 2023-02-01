@@ -2,6 +2,8 @@ import express from "express";
 import { TeamModel } from "../models/team.model";
 import { UserModel } from "../models/user.model";
 import { auth } from "express-oauth2-jwt-bearer";
+import { Types } from "mongoose";
+import mongoose from "mongoose";
 
 const teamRouter = express.Router();
 
@@ -86,7 +88,7 @@ teamRouter.get("/publicfetchbyuserid", async (req, res) => {
   }
 });
 
-teamRouter.post("/postulation", async (req, res) => {
+teamRouter.put("/postulation", async (req, res) => {
   try {
     const checkTeam = await TeamModel.findOne({
       _id: req.body.teamId,
@@ -94,18 +96,37 @@ teamRouter.post("/postulation", async (req, res) => {
     const checkUser = await UserModel.findOne({
       _id: req.body.userId,
     });
-    const checkSecretCode = await TeamModel.findOne({
-      teamSecretCode: req.body.secretCode,
-    });
-    if (checkTeam && checkUser && checkSecretCode) {
+    if (checkTeam && checkUser) {
+      const team = await TeamModel.findOne({ _id: req.body.teamId });
+
+      if (team?.teamSecretCode !== req.body.secretCode) {
+        return (
+          res.status(400).json({ message: "Incorrect secret code" }) &&
+          console.log("Incorrect secret code")
+        );
+      }
+
+      if (team?.teamPostulations.includes(req.body.userId)) {
+        return (
+          res.status(400).json({ message: "User already postulated" }) &&
+          console.log("User already postulated")
+        );
+      } else if (team?.teamMembers.includes(req.body.userId)) {
+        return (
+          res.status(400).json({ message: "User already in the team" }) &&
+          console.log("User already in the team")
+        );
+      }
+
       const updateTeamPostulations = await TeamModel.findOneAndUpdate(
         { _id: req.body.teamId },
         { $push: { teamPostulations: req.body.userId } },
         { new: true, runValidators: true }
       );
+      console.log(updateTeamPostulations);
     }
 
-    return res.status(200).json();
+    return res.status(200).json({ message: "Postulation sent !" });
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
@@ -114,16 +135,45 @@ teamRouter.post("/postulation", async (req, res) => {
 
 teamRouter.get("/postulationsfetch", async (req, res) => {
   try {
-    const fetchPostulationUsers = await UserModel.find(
-      {},
-      { userName: 1, keyProfileImg: 1, playerPoints: 1 }
-    )
-      .sort({
-        userName: 1,
-      })
-      .limit(100);
-    console.log(fetchPostulationUsers);
-    return res.status(200).json(fetchPostulationUsers);
+    const fetchPostulationIds = await TeamModel.findOne(
+      { _id: req.query.teamid },
+      { teamPostulations: 1 }
+    );
+
+    if (fetchPostulationIds) {
+      const fetchPostulationUserData = await UserModel.find({
+        _id: { $in: fetchPostulationIds.teamPostulations },
+      });
+
+      return (
+        res.status(200).json(fetchPostulationUserData) &&
+        console.log(fetchPostulationUserData)
+      );
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+teamRouter.put("/acceptpostulation", async (req, res) => {
+  try {
+    const team = await TeamModel.findOne({ _id: req.query.teamid });
+    const userId = new mongoose.Types.ObjectId(req.query.userid);
+
+    if (team && userId) {
+      if (!team.teamPostulations.includes(userId.toString())) {
+        return res
+          .status(400)
+          .json({ error: "User not found in teamPostulations array" });
+      }
+      team.teamPostulations = team.teamPostulations.filter(
+        (postulation) => postulation.toString() !== userId.toString()
+      );
+      team.teamMembers.push(userId.toString());
+      const updateTeam = await team.save();
+      return res.status(200).json(updateTeam) && console.log(team.teamMembers);
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
