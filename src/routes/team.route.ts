@@ -158,21 +158,26 @@ teamRouter.get("/postulationsfetch", async (req, res) => {
 
 teamRouter.put("/acceptpostulation", async (req, res) => {
   try {
-    const team = await TeamModel.findOne({ _id: req.query.teamid });
-    const userId = new mongoose.Types.ObjectId(req.query.userid);
+    const teamCheck = await TeamModel.findOne({ _id: req.query.teamid });
+    const userCheck = await UserModel.findOne({ _id: req.query.userid });
 
-    if (team && userId) {
-      if (!team.teamPostulations.includes(userId.toString())) {
-        return res
-          .status(400)
-          .json({ error: "User not found in teamPostulations array" });
-      }
-      team.teamPostulations = team.teamPostulations.filter(
-        (postulation) => postulation.toString() !== userId.toString()
+    const teamId = teamCheck?._id.toString();
+    const userId = userCheck?._id.toString();
+
+    if (!teamCheck?.teamPostulations.includes(userId as string)) {
+      return res
+        .status(400)
+        .json({ error: "User not found in teamPostulations array" });
+    }
+    if (teamCheck && userCheck) {
+      teamCheck.teamPostulations = teamCheck.teamPostulations.filter(
+        (postulation) => postulation.toString() !== userId
       );
-      team.teamMembers.push(userId.toString());
-      const updateTeam = await team.save();
-      return res.status(200).json(updateTeam) && console.log(team.teamMembers);
+      teamCheck.teamMembers.push(userId as string);
+      const updateTeam = await teamCheck.save();
+      return (
+        res.status(200).json(updateTeam) && console.log(teamCheck.teamMembers)
+      );
     }
   } catch (err) {
     console.log(err);
