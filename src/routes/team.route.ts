@@ -26,7 +26,7 @@ teamRouter.post("/create", checkJwt, async (req: any, res: any) => {
           {
             $set: {
               team: {
-                _teamId: createNewTeam._id,
+                _teamId: createNewTeam._id.toString(),
                 teamName: req.body.teamName,
                 teamTag: req.body.teamTag,
               },
@@ -164,19 +164,17 @@ teamRouter.put("/acceptpostulation", async (req, res) => {
     const teamId = teamCheck?._id.toString();
     const userId = userCheck?._id.toString();
 
-    if (!teamCheck?.teamPostulations.includes(userId as string)) {
-      return res
-        .status(400)
-        .json({ error: "User not found in teamPostulations array" });
-    }
-    if (teamCheck && userCheck) {
-      teamCheck.teamPostulations = teamCheck.teamPostulations.filter(
-        (postulation) => postulation.toString() !== userId
-      );
+    if (teamCheck && userCheck && userCheck.team) {
       teamCheck.teamMembers.push(userId as string);
+
+      userCheck.team._teamId = teamId as string;
+
       const updateTeam = await teamCheck.save();
+      const updatedUser = await userCheck.save();
+
       return (
-        res.status(200).json(updateTeam) && console.log(teamCheck.teamMembers)
+        res.status(200).json() &&
+        console.log(teamCheck.teamMembers && userCheck.team?._teamId)
       );
     }
   } catch (err) {

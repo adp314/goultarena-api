@@ -40,7 +40,7 @@ const userSchema = new Schema({
   createdAt: { type: Date, default: Date.now() },
   updated_at: { type: String, default: "" },
   team: {
-    _teamId: { type: Types.ObjectId, ref: "Team" },
+    _teamId: { type: String, default: "" },
     teamName: { type: String, default: "" },
     teamTag: { type: String, default: "" },
   },
