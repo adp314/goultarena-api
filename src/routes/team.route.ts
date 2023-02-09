@@ -164,18 +164,20 @@ teamRouter.put("/acceptpostulation", async (req, res) => {
     const teamId = teamCheck?._id.toString();
     const userId = userCheck?._id.toString();
 
-    if (teamCheck && userCheck && userCheck.team) {
-      teamCheck.teamMembers.push(userId as string);
+    if (!teamCheck?.teamMembers.includes(userId as string)) {
+      if (teamCheck && userCheck && userCheck.team) {
+        teamCheck.teamMembers.push(userId as string);
 
-      userCheck.team._teamId = teamId as string;
+        userCheck.team._teamId = teamId as string;
 
-      const updateTeam = await teamCheck.save();
-      const updatedUser = await userCheck.save();
+        const updateTeam = await teamCheck.save();
+        const updatedUser = await userCheck.save();
 
-      return (
-        res.status(200).json() &&
-        console.log(teamCheck.teamMembers && userCheck.team?._teamId)
-      );
+        return (
+          res.status(200).json() &&
+          console.log(teamCheck.teamMembers && userCheck.team._teamId)
+        );
+      }
     }
   } catch (err) {
     console.log(err);
